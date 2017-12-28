@@ -1,0 +1,122 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 09/11/2016, 07:17:31 PM
+    Author     : Admin
+*/
+
+div.container{
+    width: 100%;
+    border: solid yellow;
+}
+div.cabecera, div.pie{
+    width: 100%;
+    height: 80px;
+    border: none;
+    background-color: cadetblue;
+    text-align: center;
+}
+div.cabecera:first-child{
+    color: #990000;
+    padding-top: 30px;
+}
+div.navegacion{
+    height: 19px;
+    background-color: crimson;
+    text-align: center;
+}
+div.cuerpo{
+    text-align: center;
+    border: none;
+    background-color: slateblue;
+}
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 60px;
+    margin-left: 48%;
+}
+li a, li a:visited{
+    display: block;
+    background-color: green;
+    color: black;
+    text-decoration: none;
+}
+li a:hover{
+    display: block;
+    color: white;
+    background-color: #666666;
+}
+h1,h2{
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+h1.tabla{
+    color: blue;
+}
+table{
+    width: 50%;
+    margin: auto;
+}
+th{
+    color: red;
+    background-color: orange;
+    font-size: large;
+}
+th.cabecera{
+    color: red;
+    background-color: #00cc00;
+    font-size: large;
+}
+td{
+    color: orangered;
+    background-color: greenyellow;
+}
+td a{
+    text-decoration: none;
+    color: darkorchid;
+}
+td a:hover{
+    color: indigo;
+    background-color: red;
+}
+div.grupo{
+    display: inline-block;
+    border: 3px solid cyan;
+    margin: 3px;
+}
+div.grupo a{
+    display: block;
+    background-color: #ff3333;
+    text-decoration: none;
+}
+div.grupo a:hover{
+    color: white;
+    background-color: darkgoldenrod;
+    border: solid red;
+}
+a#logout{
+    background-color: darkgoldenrod;
+}
+a.cancelar, input[type=submit], a.boton{
+    border: solid green;
+    text-decoration: none;
+    color: darkorchid;
+    background-color: blue;
+}
+a.boton{
+    background-color: orange;
+}
+a.cancelar:hover, input[type=submit]:hover, a.boton:hover{
+    color: indigo;
+    background-color: red;
+}
+input[type=submit]{
+    font-size: 15px ;
+    font-weight: bolder;
+}

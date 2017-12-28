@@ -73,7 +73,6 @@
             <%  }   %>
                 <input type="hidden" name="vaccion" value="modificarhabitacion">
                 <input type="hidden" name="vid" value="<%= h.getId_habitacion()%>">
-                <!--<a href="HabitacionServlet" class="w3-btn w3-blue w3-margin-top">Cancelar</a>-->
                 <a href="javascript: window.history.go(-1)" class="w3-btn w3-blue w3-margin-top">Cancelar</a>
             </form>
             <br>

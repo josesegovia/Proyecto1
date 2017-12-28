@@ -2,7 +2,7 @@
  * SCM
  * SISTEMA DE CONTROL DE MOTEL
  * FPUNA - Lic. Ciencias Informaticas- Programacion
- * Clase: 
+ * Clase: MovilServlet
  * @autor: Jose Segovia
  * Año: 2017
  */

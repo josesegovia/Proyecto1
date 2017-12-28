@@ -2,7 +2,7 @@
  * SCM
  * SISTEMA DE CONTROL DE MOTEL
  * FPUNA - Lic. Ciencias Informaticas- Programacion
- * Clase: 
+ * Clase: HorariosServlet
  * @autor: Jose Segovia
  * Año: 2017
  */
@@ -45,6 +45,7 @@ public class HorariosServlet extends HttpServlet {
         
         RequestDispatcher rd;
         
+        //En esta seccion es donde se controla la vista de la tabla Horarios
         if("ver".equals(vaccion) || vaccion == null){
             horarios = ch.GetAll();
             request.setAttribute("horarios", horarios);
@@ -56,6 +57,7 @@ public class HorariosServlet extends HttpServlet {
                 rd.forward(request, response);
             }
         }
+        //En esta seccion se verifica cuando se pide ingresar un Nuevo Horario
         if("nuevo".equals(vaccion)){
             ControlEmpleado ce = new ControlEmpleado();
             ArrayList<Empleado> empleados = ce.GetAll();
@@ -65,11 +67,13 @@ public class HorariosServlet extends HttpServlet {
                 rd.forward(request, response);
             }
         }
+        //En esta seccion se realiza la insercion de un Nuevo Horario
         if("guardar".equals(vaccion)){
             h = new Horario();
             
             int empleado = Integer.parseInt(request.getParameter("empleado"));
             h.setId_empleado(empleado);
+            //Se reciben los Parametros que corresponden a los Horarios de cada dia de la semana
             String lunes = request.getParameter("Lunes");
             h.setLunes(lunes);
             String martes = request.getParameter("Martes");
@@ -84,9 +88,11 @@ public class HorariosServlet extends HttpServlet {
             h.setSabado(sabado);
             String domingo = request.getParameter("Domingo");
             h.setDomingo(domingo);
+            //Se inserta en la BD
             ch.Insertar(h);
             response.sendRedirect("HorariosServlet");
         }
+        //En esta seccion se verifica cuando se pide modificar un Horario existente
         if("mod".equals(vaccion)){
             int vid = Integer.valueOf(request.getParameter("vid"));
             h = ch.GetbyId(vid);
@@ -96,6 +102,7 @@ public class HorariosServlet extends HttpServlet {
                 rd.forward(request, response);
             }
         }
+        //En esta seccion se reciben los parametros que se desean cambiar y se realizan la actualizacion de los Horarios
         if("modificar".equals(vaccion)){
             h = new Horario();
             int vid = Integer.parseInt(request.getParameter("vid"));

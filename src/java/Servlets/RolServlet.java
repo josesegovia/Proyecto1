@@ -2,7 +2,7 @@
  * SCM
  * SISTEMA DE CONTROL DE MOTEL
  * FPUNA - Lic. Ciencias Informaticas- Programacion
- * Clase: 
+ * Clase: RolServlet
  * @autor: Jose Segovia
  * Año: 2017
  */
@@ -46,17 +46,20 @@ public class RolServlet extends HttpServlet {
         String vaccion = request.getParameter("vaccion");
         
         RequestDispatcher rd;
-        HttpSession s=request.getSession(true);
         
+        //Se obtiene el atributo isrol que contiene todos los permisos del usuario
         Rol ro = (Rol) request.getAttribute("isrol");
+        //Aqui se verifica que permisos tiene el usuario
         String permiso = ro.getRoles();
         if(!permiso.contains("V")){
+            //Si no tiene permiso para ver los roles se envia a NoPermiso.jsp
             rd = request.getRequestDispatcher("Error/NoPermiso.jsp");
             if(rd != null){
                 rd.forward(request, response);
             }
-        }
+        }//Si se tiene permiso continua
         
+        //En esta seccion es donde se controla la vista de la tabla Rol
         if("ver".equals(vaccion) || vaccion == null){
             roles = cr.GetAll();
             request.setAttribute("roles", roles);
@@ -65,31 +68,39 @@ public class RolServlet extends HttpServlet {
                 rd.forward(request, response);
             }
         }
+        //En esta seccion se verifica cuando se pide ingresar un Nuevo Producto
         if("nuevorol".equals(vaccion)){
+            //Se controla que se tenga permiso para crear un Nuevo Rol
             if(!permiso.contains("C")){
+                //Si no se tiene se redirecciona a NoPermiso.jsp
                 rd = request.getRequestDispatcher("Error/NoPermiso.jsp");
             }else{
+                //Si se tiene se redireccionaa NuevoRol.jsp
                 rd = request.getRequestDispatcher("Roles/NuevoRol.jsp");
             }
             if(rd != null){
                 rd.forward(request, response);
             }
         }
+        //En esta seccion se realiza la insercion del Nuevo Rol en la BD
         if("guardar".equals(vaccion)){
             r = new Rol();
             String nombre = request.getParameter("nombre");
             r.setNombre_rol(nombre);
             cr.Insertar(r);
             response.sendRedirect("RolServlet");
-            
         }
+        //En esta seccion se realiza la eliminacion de un Rol especifico
         if("eliminar".equals(vaccion)){
             if(!permiso.contains("E")){
+                //Se controla que se tenga permiso para eliminar un Rol
                 rd = request.getRequestDispatcher("Error/NoPermiso.jsp");
                 if(rd != null){
+                    //Si no se tiene se redirecciona a NoPermiso.jsp
                     rd.forward(request, response);
                 }
             }else{
+                //Si se tiene permiso se elimina el Rol de la BD
                 int vid = Integer.valueOf(request.getParameter("vid"));
                 r = new Rol();
                 r.setId_rol(vid);
@@ -99,58 +110,87 @@ public class RolServlet extends HttpServlet {
                 response.sendRedirect("RolServlet");
             }
         }
+        //En esta seccion se verifica cuando se pide modificar un Rol especifico
         if("mod".equals(vaccion)){
+            //Se controla que se tenga permiso para modificar un Producto
             if(!permiso.contains("M")){
+                //Si no se tiene se redirecciona a NoPermiso.jsp
                 rd = request.getRequestDispatcher("Error/NoPermiso.jsp");
                 if(rd != null){
                     rd.forward(request, response);
                 }
             }else{
+                //Si se tiene permiso se continua
                 int vid = Integer.valueOf(request.getParameter("vid"));
                 r = cr.GetbyId(vid);
+                //Se verifica que no sea el usuario Admin
                 if(vid != 1){
+                    //Si no es Admin  se redirecciona a ModRoles.jsp
                     rd = request.getRequestDispatcher("Roles/ModRoles.jsp");
                     request.setAttribute("rol", r);
                     if(rd != null){
                         rd.forward(request, response);
                     }
                 }else{
+                    //Si es Admin  se regresa a la vista de Roles
                     response.sendRedirect("RolServlet");
                 }
             }
         }
+        //En esta seccion se reciben los parametros que se desean cambiar y se realizan la actualizacion del Rol
         if("modificarRol".equals(vaccion)){
-            int vid = Integer.valueOf(request.getParameter("vid"));
+            //Se obtienen los parametros recibidos
+            int id = Integer.valueOf(request.getParameter("vid"));
             String nombre = request.getParameter("nombre");
-            r = cr.GetbyId(vid);
+            //Se obtiene el rol que se quiere midificar
+            r = cr.GetbyId(id);
+            //Se guarda el nombre que se recibio (puede ser un nombre nuevo o el mismo)
             r.setNombre_rol(nombre);
+            //Aqui se muestran todas las tablas que tienen permisos
             String[] tablas={"cliente","empleado","habitacion","inventario","roles","socios","historial","factura"};
+            //Se repite esto para cada tabla que posee un permiso
             for(int i = 0;i<8;i++ ){
+                //Se obtiene el permisos para Ver
                 String permisos = "";
                 String c1 = request.getParameter(tablas[i]+"1");
+                //Si tiene permiso para Ver se inserta V
+                //Si no inserta0
                 if("V".equals(c1)){
                     permisos = permisos+"V";
                 }else{
                     permisos = permisos+"0";
                 }
+                //Se obtiene el permisos para Crear
                 String c2 = request.getParameter(tablas[i]+"2");
+                //Si tiene permiso para Crear se inserta C
+                //Si no inserta 0
                 if("C".equals(c2)){
                     permisos = permisos+"C";
                 }else{
                     permisos = permisos+"0";
                 }
+                //Se obtiene el permisos para Modificar
                 String c3 = request.getParameter(tablas[i]+"3");
+                //Si tiene permiso para modificar se inserta M
+                //Si no inserta 0
                 if("M".equals(c3)){
                     permisos = permisos+"M";
                 }else{
                     permisos = permisos+"0";
                 }
+                //Se obtiene el permisos para Eliminar
                 String c4 = request.getParameter(tablas[i]+"4");
+                //Si tiene permiso para Eliminar se inserta E
+                //Si no inserta 0
                 if("E".equals(c4)){
                     permisos = permisos+"E";
                 }else{
                     permisos = permisos+"0";
                 }
+                //El String permiso debe quedar como una concatenacion de tods los permisos
+                //Ej: permisos = "VCME" si tiene todos los permisos
+                //permisos = "0000" si no tiene ningun permiso
+                //Se elige la tabla a la cual se ingresan los permisos actuales
                 switch(i){
                     case 0:
                         r.setCliente(permisos);
@@ -178,8 +218,10 @@ public class RolServlet extends HttpServlet {
                         break;
                 }
             }
-            
+            //Al terminar al For todas la tabls deberian tener sus nuevos permisos
+            //Se actualiza el rol
             cr.Modificar(r);
+            //Se redirecciona a la vista de los Roles
             response.sendRedirect("RolServlet");
         }
     }

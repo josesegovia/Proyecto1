@@ -2,7 +2,7 @@
  * SCM
  * SISTEMA DE CONTROL DE MOTEL
  * FPUNA - Lic. Ciencias Informaticas- Programacion
- * Clase: 
+ * Clase: HistorialServlet
  * @autor: Jose Segovia
  * Año: 2017
  */
@@ -49,20 +49,24 @@ public class HistorialServlet extends HttpServlet {
         Historial ht;
         ControlHistorial cht = new ControlHistorial();
         ArrayList<Historial> historia;
+        //Se obtiene el atributo isrol que contiene todos los permisos del usuario
         Rol r = (Rol) request.getAttribute("isrol");
         String permisos = r.getHistorial();
+        //Aqui se verifica que permisos tiene el usuario
         if(!permisos.contains("V")){
+            //Si no tiene permiso para ver las Habitaciones se envia a NoPermiso.jsp
             rd = request.getRequestDispatcher("Error/NoPermiso.jsp");
             if(rd != null){
                 rd.forward(request, response);
             }
-        }
+        }//Si se tiene permiso continua
 
+        //En esta seccion es donde se controla la vista de la tabla Hsitorial
         if("ver".equals(vaccion) || vaccion == null){
-            
+            //Se envian todas las historias de la BD
             historia = cht.GetAll();
             request.setAttribute("historia", historia);
-            
+            //Se envian todos los Cliente para usarse en la vista en Historia.jsp
             ControlCliente cc = new ControlCliente();
             ArrayList<Cliente> clientes = cc.GetAll();
             request.setAttribute("clientes", clientes);
@@ -71,15 +75,18 @@ public class HistorialServlet extends HttpServlet {
                 rd.forward(request, response);
             }
         }
+        //En esta seccion se ejecuta cuando una Habitacion es desocupada por un Anonimo, completa el historial y envia a la Facturacion para completarse
         if("sal".equals(vaccion)){
-
             Habitaciones h;
             ControlHabitacion ch = new ControlHabitacion();
+            //Se obtiene la Historia que esta trabajandose
             int vid = Integer.valueOf(request.getParameter("vid"));
             ht = cht.GetbyId(vid);
+            //Se obtiene la Habitacion desocupada
             h = ch.GetbyId(ht.getId_habitacion());
+            //Se cambia el estado a Limpiando
             h.setEstado("P");
-            ch.Modificar(h);
+            //Se obtiene la fecha y hora de salida
             DateFormat df;
             df = new SimpleDateFormat("HH:mm:ss");
             Date date = new Date();
@@ -88,21 +95,29 @@ public class HistorialServlet extends HttpServlet {
             df = new SimpleDateFormat("dd/MM/yyyy");
             String fecha_salida = df.format(date);
             ht.setFecha_salida(fecha_salida);
+            //Se actualiza la Historia
+            ch.Modificar(h);
+            //Se actualiza la Habitacion
             cht.Modificar(ht);
+            //Se envia la id de la historia para ayudar con la Facturacion
             s.setAttribute("vid", vid);
             rd = request.getRequestDispatcher("FacturacionServlet");
             if(rd != null){
                 rd.forward(request, response);
             }
         }
+        //Esta seccion se ejecuta cuando una Habitacion Reservada es ocupada
         if("ingresar".equals(vaccion)){
             Habitaciones h;
             ControlHabitacion ch = new ControlHabitacion();
+            //Se obtiene la Historia que esta trabajandose
             int vid = Integer.valueOf(request.getParameter("vid"));
             ht = cht.GetbyId(vid);
+            //Se obtiene la Habitacion
             h = ch.GetbyId(ht.getId_habitacion());
+            //Se cambia el estado a Limpiando
             h.setEstado("P");
-            ch.Modificar(h);
+            //Se obtiene la fecha y hora de salida
             DateFormat df;
             df = new SimpleDateFormat("HH:mm:ss");
             Date date = new Date();
@@ -111,19 +126,28 @@ public class HistorialServlet extends HttpServlet {
             df = new SimpleDateFormat("dd/MM/yyyy");
             String fecha_salida = df.format(date);
             ht.setFecha_salida(fecha_salida);
+            //Se actualiza la Habitacion
+            ch.Modificar(h);
+            //Se envia la id de la historia para ayudar con la Facturacion
             cht.Modificar(ht);
             s.setAttribute("vid", vid);
             response.sendRedirect("FacturacionServlet?vaccion=sal");
             
         }
+        //Esta seccion se ejecuta cuando una Habitacion Reservada es cancelada
         if("terminar".equals(vaccion)){
             Habitaciones h;
             ControlHabitacion ch = new ControlHabitacion();
+            //Se obtiene la Historia que esta trabajandose
             int vid = Integer.valueOf(request.getParameter("vid"));
             ht = cht.GetbyId(vid);
+            //Se obtiene la Habitacion
             h = ch.GetbyId(ht.getId_habitacion());
+            //Se cambia la Habitacion a Libre
             h.setEstado("L");
+            //Se actualiza la Habitacion
             ch.Modificar(h);
+            //Se elimiona el Historial
             cht.Eliminar(ht);
             rd = request.getRequestDispatcher("Principal.jsp");
             if (rd != null) {

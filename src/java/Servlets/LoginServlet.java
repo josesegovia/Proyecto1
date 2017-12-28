@@ -2,7 +2,7 @@
  * SCM
  * SISTEMA DE CONTROL DE MOTEL
  * FPUNA - Lic. Ciencias Informaticas- Programacion
- * Clase: 
+ * Clase: LoginServlet
  * @autor: Jose Segovia
  * Año: 2017
  */
@@ -11,7 +11,6 @@ package Servlets;
 import Tablas.Empleado;
 import Controladores.ControlEmpleado;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,7 +40,6 @@ public class LoginServlet extends HttpServlet {
         ControlEmpleado ce = new ControlEmpleado();
         Empleado e;
         e = new Empleado();
-        ArrayList<Empleado> usuarios = new ArrayList<>();
 
         String usuario = request.getParameter("nombre");
         String contraseña = request.getParameter("pass");
@@ -49,13 +47,16 @@ public class LoginServlet extends HttpServlet {
         
         RequestDispatcher rd;
         HttpSession s=request.getSession(true);
-        
+        //Es esta seccion se controla el ingreso del usuario
         if("ingresar".equals(vaccion)){
+            //Se recibe el Nombre de Usuario y la Contraseña
             e.setNombre_usuario(usuario);
             e.setPassword(contraseña);
-            
+            //Verifica si coinciden con algun Empleado
+            //Si no coincide id =0
             int id = ce.Verificar(e);
             if(id!=0){
+                //Si hay uno que coincide se loguea
                 e = ce.GetbyId(id);
                 s.setAttribute("usuario", e);
                 rd = request.getRequestDispatcher("Principal.jsp");
@@ -67,6 +68,7 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect("/Proyecto1");
             }
         }
+        //En esta seccion se desconecta la sesion
         if("logout".equals(vaccion)){
             s.invalidate();
             response.sendRedirect("Login.jsp");

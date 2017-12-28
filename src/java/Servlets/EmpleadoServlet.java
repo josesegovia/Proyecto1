@@ -104,7 +104,7 @@ public class EmpleadoServlet extends HttpServlet {
         }
         //En esta seccion se realiza la eliminacion del Empleado
         if("eliminar".equals(vaccion)){
-            //Se controla que se tenga permiso para eliminar Clientes
+            //Se controla que se tenga permiso para eliminar Empleados
             if(!permisos.contains("E")){
                 //Si no tiene permiso se redirecciona a NoPermiso.jsp
                 rd = request.getRequestDispatcher("Error/NoPermiso.jsp");

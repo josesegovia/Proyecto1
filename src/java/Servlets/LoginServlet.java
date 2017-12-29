@@ -56,7 +56,7 @@ public class LoginServlet extends HttpServlet {
             //Si no coincide id =0
             int id = ce.Verificar(e);
             if(id!=0){
-                //Si hay uno que coincide se loguea
+                //Si hay uno que coincide se inicia sesion
                 e = ce.GetbyId(id);
                 s.setAttribute("usuario", e);
                 rd = request.getRequestDispatcher("Principal.jsp");
@@ -68,7 +68,7 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect("/Proyecto1");
             }
         }
-        //En esta seccion se desconecta la sesion
+        //En esta seccion se cierra la sesion
         if("logout".equals(vaccion)){
             s.invalidate();
             response.sendRedirect("Login.jsp");

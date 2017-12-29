@@ -60,7 +60,17 @@ public class HorariosServlet extends HttpServlet {
         //En esta seccion se verifica cuando se pide ingresar un Nuevo Horario
         if("nuevo".equals(vaccion)){
             ControlEmpleado ce = new ControlEmpleado();
+            //Se obtienen todos los empleados
             ArrayList<Empleado> empleados = ce.GetAll();
+            //Se obtienen todos los horarios
+            horarios = ch.GetAll();
+            //Se controla que cada Cliente que tiene un Horario no se envie
+            for(Horario hx : horarios){
+                int id_empleado = hx.getId_empleado();
+                Empleado e = ce.GetbyId(id_empleado); 
+                empleados.remove(e);
+            }
+            //Se envia los empleados que todavia no tienen Horario para crear uno nuevo
             request.setAttribute("empleados", empleados);
             rd = request.getRequestDispatcher("Horarios/NuevoHorario.jsp");
             if(rd != null){

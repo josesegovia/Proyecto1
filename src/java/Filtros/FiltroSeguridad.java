@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -57,9 +58,21 @@ public class FiltroSeguridad implements Filter {
         
         //Se llama a la session y si no hay se inicializa
         HttpSession s=request.getSession(true);
+        //Verifica si hay Empleados
+        ControlEmpleado ce = new ControlEmpleado();
+        Empleado e = new Empleado();
+        ArrayList<Empleado> empleados = ce.GetAll();
+        //Si no hay ningun Empleado se crea un Empleado Administrador
+        if(empleados == null || empleados.isEmpty()){
+            e.setNombre("Jose");
+            e.setApellido("Segovia");
+            e.setCedula("12345678");
+            e.setNombre_usuario("ADMIN");
+            e.setPassword("ADMIN");
+            ce.Insertar(e);
+        }
         
         //Se busca el atributo usuario de la session
-        Empleado e;
         e = (Empleado) s.getAttribute("usuario");
         //Se pide el parametro vaccion y la URL que fue llamada
         

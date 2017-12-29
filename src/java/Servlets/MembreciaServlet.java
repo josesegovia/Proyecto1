@@ -23,7 +23,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -46,13 +45,11 @@ public class MembreciaServlet extends HttpServlet {
         
         
         ControlMembrecia cm = new ControlMembrecia();
-        Membrecia m = new Membrecia();
         ArrayList<Membrecia> socios;
         
         String vaccion = request.getParameter("vaccion");
         
         RequestDispatcher rd;
-        HttpSession s=request.getSession(true);
         //Se obtiene el atributo isrol que contiene todos los permisos del usuario
         Rol r = (Rol) request.getAttribute("isrol");
         //Aqui se verifica que permisos tiene el usuario
@@ -123,6 +120,14 @@ public class MembreciaServlet extends HttpServlet {
                 //Si se tiene se redireccionaa NuevoSocio.jsp
                 ControlCliente cc = new ControlCliente();
                 ArrayList<Cliente> clientes = cc.GetAll();
+                //Se elimina de clientes todos los Clientes con Membrecia
+                socios = cm.GetAll();
+                for(Membrecia m1 : socios){
+                    int id_cliente = m1.getId_cliente();
+                    Cliente c = cc.GetbyId(id_cliente);
+                    clientes.remove(c);
+                }
+                
                 request.setAttribute("clientes", clientes);
                 rd = request.getRequestDispatcher("Membrecias/NuevoSocio.jsp");
             }
@@ -132,38 +137,17 @@ public class MembreciaServlet extends HttpServlet {
         }
         //En esta seccion se realiza la insercion de la Nueva Membrecia en la BD
         if("guardar".equals(vaccion)){
+            Membrecia m = new Membrecia();
             int cliente = Integer.valueOf(request.getParameter("cliente"));
             //Se obtienen todos los Socios
             socios = cm.GetAll();
-            boolean existe = false;
-            //Se verifica si el Cliente ya tiene una Membrecia
-            for(Membrecia mx : socios){
-                int id = mx.getId_cliente();
-                if(id==cliente){
-                    existe=true;
-                }
-            }
-            
-            if(existe){
-                //Si tiene una Membrecia se reenvia a NuevoSocio.jsp con un 
-                //aviso de que la Membrecia ya existe
-                ControlCliente cc = new ControlCliente();
-                ArrayList<Cliente> clientes = cc.GetAll();
-                request.setAttribute("clientes", clientes);
-                request.setAttribute("existe", existe);
-                rd = request.getRequestDispatcher("Membrecias/NuevoSocio.jsp");
-                if(rd != null){
-                    rd.forward(request, response);
-                }
-            }else{
-                //Si no existe se crea una Nueva Membrecia
-                //Se inserta el cliente y se pone en estado Inactivo
-                m.setId_cliente(cliente);
-                m.setEstado("Inactivo");
-                //Se inserta en la BD
-                cm.Insertar(m);
-                response.sendRedirect("MembreciaServlet");
-            }
+            //Si no existe se crea una Nueva Membrecia
+            //Se inserta el cliente y se pone en estado Inactivo
+            m.setId_cliente(cliente);
+            m.setEstado("Inactivo");
+            //Se inserta en la BD
+            cm.Insertar(m);
+            response.sendRedirect("MembreciaServlet");
         }
         //En esta seccion se realiza la eliminacion de una Membrecia especifica
         if("eliminar".equals(vaccion)){
@@ -177,6 +161,7 @@ public class MembreciaServlet extends HttpServlet {
             }else{
                 //Si se tiene la Membrecia se elimina de la BD
                 int vid = Integer.valueOf(request.getParameter("vid"));
+                Membrecia m = new Membrecia();
                 m.setId_membrecia(vid);
                 cm.Eliminar(m);
                 response.sendRedirect("MembreciaServlet");
@@ -214,9 +199,9 @@ public class MembreciaServlet extends HttpServlet {
                         //Si la cant. de dias pasados es mayor que 30 se desacctiva la Membrecia
                         if(30<dias){
                             id = s1.getId_socio();
-                            Membrecia m1 = cm.GetbyId(id);
-                            m1.setEstado("Inactivo");
-                            cm.Modificar(m1);
+                            Membrecia m = cm.GetbyId(id);
+                            m.setEstado("Inactivo");
+                            cm.Modificar(m);
                         }
                     }
                     
@@ -270,6 +255,7 @@ public class MembreciaServlet extends HttpServlet {
             ControlSociosPagos cs = new ControlSociosPagos();
             int socio = Integer.parseInt(request.getParameter("socio"));
             //Se obtiene el Socio y se actualiza su estado a Activo
+            Membrecia m = new Membrecia();
             m = cm.GetbyIdSocio(socio);
             m.setEstado("Activo");
             cm.Modificar(m);

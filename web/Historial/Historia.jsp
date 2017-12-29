@@ -1,7 +1,7 @@
 <%-- 
     Document   : Historial
     Created on : 08/11/2017, 02:28:29 PM
-    Author     : Admin
+    Author     : Jose Segovia
 --%>
 
 <%@page import="java.text.ParseException"%>
@@ -20,8 +20,8 @@
         <link rel="stylesheet" type="text/css" href="w3.css">
     </head>
     <body>
+        <!--Se obtienen todas las historias para su uso-->
         <%  ArrayList<Historial> historia = (ArrayList<Historial>) request.getAttribute("historia");    %>
-        <%  ArrayList<Cliente> clientes = (ArrayList<Cliente>) request.getAttribute("clientes");  %>
         <%@include file="/Navegacionjsp.jspf" %>
         <div class="w3-container w3-center w3-blue-gray body-height">
             <table class="w3-table-all w3-hoverable w3-centered w3-text-blue">
@@ -40,23 +40,18 @@
                         <th>Hora Salida</th>
                         <th>Tiempo Ocupado</th>
                     </tr>
-                </thead>
-<%
-                for(Historial h : historia){
-                String f_entada = h.getHora_entrada()+" "+ h.getFecha_entrada();
-                String f_salida = h.getHora_salida()+" "+ h.getFecha_salida();
-                    if(!" ".equals(f_salida)){
-%>
+                </thead>                
+            <%  for(Historial h : historia){
+                    String f_entada = h.getHora_entrada()+" "+ h.getFecha_entrada();
+                    String f_salida = h.getHora_salida()+" "+ h.getFecha_salida();
+                    if(!" ".equals(f_salida)){  %>
                 <tr>
                     <td><%= h.getId_historial()%></td>
                     <td><%= h.getId_habitacion()%></td>
-                <% for(Cliente c : clientes){ %>
-                <%      if(c.getId_cliente() == h.getCliente()){    %>
-                    <%      String nombre = c.getNombre() + " " + c.getApellido(); %>
+                    <%  ControlCliente cc = new ControlCliente();
+                    Cliente c1 = cc.GetbyId(h.getCliente());
+                    String nombre = c1.getNombre() + " " + c1.getApellido(); %>
                     <td><%= nombre %></td>
-                    
-                    <%  }   %>
-                <%  }   %>
                     <td><%= h.getDia_semana()%></td>
                     <td><%= h.getFecha_entrada()%></td>
                     <td><%= h.getHora_entrada() %></td>

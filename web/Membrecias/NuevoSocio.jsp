@@ -1,7 +1,7 @@
 <%-- 
     Document   : NuevoSocio
     Created on : 15/09/2017, 05:04:38 PM
-    Author     : Admin
+    Author     : Jose Segovia
 --%>
 
 <%@page import="Tablas.Cliente"%>
@@ -15,18 +15,14 @@
         <link rel="stylesheet" type="text/css" href="w3.css">
     </head>
     <body>
+        <!--Obtiene todos los Clientes que no tengan Membrecia-->
         <%  ArrayList<Cliente> clientes = (ArrayList<Cliente>) request.getAttribute("clientes");  %>
-        <%  boolean existe = false; %>
-        <%  if(request.getAttribute("existe") != null){ %>
-            <%  existe = (boolean) request.getAttribute("existe");  %>
-        <%  }   %>
         <%@include file="/Navegacionjsp.jspf" %>
         <div class="w3-container w3-center w3-blue-gray body-height">
             <h1>Nuevo Socio</h1>
-        <%  if(existe){ %>
-            <h2>Socio ya esta Incripto</h2>
-        <%  }   %>
+            <!--Un Form hacia MembreciaServlet para Crear una Nueva Membrecia-->
             <form action="MembreciaServlet" class="w3-container" style="width: 20%; margin: auto">
+                <!--Se pide que se seleccione el Cliente al que se le Creara la Membrecia-->
                 <label class="w3-text-purple w3-left"><b>Cliente</b></label>
                 <select name="cliente" class="w3-input w3-border w3-khaki">
                     <% for(Cliente c : clientes){ %>
@@ -35,12 +31,10 @@
                 <%  }   %>
                 </select>
                 <input type="submit" class="w3-btn w3-blue w3-margin-top" value="Guardar" /> 
+                <!--El input vaccion indica la accion a realizarse-->
                 <input type="hidden" name="vaccion" value="guardar">
-        <%  if(existe){ %>
-                <a href="MembreciaServlet" class="w3-btn w3-blue w3-margin-top">Cancelar</a>
-        <%  }else{  %>
+                <!--Se regresa a la pagina anterior-->
                 <a href="javascript: window.history.go(-1)" class="w3-btn w3-blue w3-margin-top">Cancelar</a>
-        <%  }   %>
             </form>
             <br>
         </div>

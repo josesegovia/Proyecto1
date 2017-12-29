@@ -65,9 +65,6 @@ public class EmpleadoServlet extends HttpServlet {
         if("ver".equals(vaccion) || vaccion == null){
             empleados = ce.GetAll();
             request.setAttribute("empleados", empleados);
-            ControladorRol cr = new ControladorRol();
-            ArrayList<Rol> roles = cr.GetAll();
-            request.setAttribute("roles", roles);
             rd = request.getRequestDispatcher("Empleados/Empleados.jsp");
             if(rd != null){
                 rd.forward(request, response);
@@ -99,7 +96,7 @@ public class EmpleadoServlet extends HttpServlet {
             e.setNombre_usuario(usuario);
             contraseña = "12345";
             e.setPassword(contraseña);
-            Boolean b = ce.Insertar(e);
+            ce.Insertar(e);
             response.sendRedirect("EmpleadoServlet");
         }
         //En esta seccion se realiza la eliminacion del Empleado

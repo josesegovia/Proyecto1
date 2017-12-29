@@ -1,7 +1,7 @@
 <%-- 
     Document   : Facturas
     Created on : 05/12/2017, 06:56:44 PM
-    Author     : Admin
+    Author     : Jose Segovia
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -16,6 +16,7 @@
         <link rel="stylesheet" type="text/css" href="w3.css">
     </head>
     <body>
+        <!--Se obtienen todas las Facturas para su uso-->
         <%  ArrayList<Factura> facturas = (ArrayList<Factura>) request.getAttribute("facturas");    %>
         <%@include file="/Navegacionjsp.jspf" %>
         <div class="w3-container w3-center w3-blue-gray body-height">
@@ -52,6 +53,7 @@
                         <div class="w3-dropdown-hover">
                             <button class="w3-button w3-red w3-hover-blue">Opciones</button>
                             <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                                <!--Este boton te envia a ver todos los Detalles de la factura-->
                                 <a href="FacturacionServlet?vaccion=verdetalle&vid=<%= f.getId_factura()%>" class="w3-bar-item w3-button w3-red w3-hover-blue">Ver Detalles</a>
                             </div>
                         </div>

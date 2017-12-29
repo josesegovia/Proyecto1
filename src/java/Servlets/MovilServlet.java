@@ -50,29 +50,34 @@ public class MovilServlet extends HttpServlet {
         String vaccion;
         vaccion = request.getParameter("vaccion");
         
+        //En esta seccion es donde se envia a la vista de Movil 
+        //para que los CLientes Inicien Sesion para poder Reservar
         if("ver".equals(vaccion) || vaccion == null){
-
             rd = request.getRequestDispatcher("Movil/MovilIngreso.jsp");
             if(rd != null){
                 rd.forward(request, response);
             }
         }
+        //En esta seccion se realiza el Inicio de Sesion
         if("ingresar".equals(vaccion)){
+            //Se recibe el Nº de Membrecia
             int numero_de_membrecia = Integer.parseInt(request.getParameter("numero"));
+            //Se recibe el Nº de Cedula
             String cedula = request.getParameter("cedula");
-            
+            //Se obtiene la Membrecia a tra vez del Nº que se recibio
             ControlMembrecia cm = new ControlMembrecia();
             Membrecia m = cm.GetbyId(numero_de_membrecia);
-            
+            //Se Obtiene 
             ControlCliente cc = new ControlCliente();
             Cliente c = cc.GetbyId(m.getId_cliente());
             String estado = m.getEstado();
-            
+            //Se verifica que la Membrecia este Activa
             if("Activo".equals(estado)){
                 if(cedula.equals(c.getCedula())){
-
+                    //Si esta Activo se Inicia Sesion
+                    //Se guarda el Cliente actual en las Sesion
                     s.setAttribute("cliente", c);
-
+                    //Se Obtienen todas las Habitaciones Libres;
                     ControlHabitacion ch = new ControlHabitacion();
                     ArrayList<Habitaciones> habitaciones = ch.GetAllLibres();
                     request.setAttribute("habitaciones", habitaciones);
@@ -82,16 +87,19 @@ public class MovilServlet extends HttpServlet {
                     rd = request.getRequestDispatcher("Movil/ErrorIngreso.jsp");
                 }
             }else{
+                //Si esta Inactiva se envia NoActivo.jsp
                 rd = request.getRequestDispatcher("Movil/NoActivo.jsp");
             }
             if(rd != null){
                 rd.forward(request, response);
             }
         }
+        //En esta seccion se realiza el cierre de Sesion
         if("logout".equals(vaccion)){
             s.invalidate();
             response.sendRedirect("MovilServlet");
         }
+        //En esta seccion se verifica cuando se pide un Reservar una Habitacion
         if("reservar".equals(vaccion)){
             int id_habitacion = Integer.parseInt(request.getParameter("vid"));
             ControlHabitacion ch = new ControlHabitacion();
@@ -102,32 +110,33 @@ public class MovilServlet extends HttpServlet {
                 rd.forward(request, response);
             }
         }
+        //En esta seccion se realiza la Reserva de la Habitacion
         if("reservarhabitacion".equals(vaccion)){
             try {
+                //Se recibe el id de la Habitacion
                 int id_habitacion = Integer.parseInt(request.getParameter("vid"));
+                //Se usa para obtener la Habitacion
                 ControlHabitacion ch = new ControlHabitacion();
                 Habitaciones h = ch.GetbyId(id_habitacion);
-                h.setEstado("R");
-                ch.Modificar(h);
                 
                 ControlHistorial cht = new ControlHistorial();
                 Historial ht = new Historial();
-                
+                //Se obtiene el los datos del Cliente actual de la Sesion
                 Cliente c = (Cliente) s.getAttribute("cliente");
-                
+                //Se recibe la fecha que se Reservo
                 String fecha = request.getParameter("fecha");
+                //Se procesa en un formato que pueda ser usado
                 int separador1 = fecha.indexOf("-");
                 int separador2 = fecha.indexOf("-",separador1+1);
                 String año = fecha.substring(0,separador1);
                 String mes = fecha.substring(separador1+1,separador2);
                 String dia = fecha.substring(separador2+1);
                 fecha = dia+"/"+mes+"/"+año;
-                
+                //Se recibe la Hora que se Reservo
                 String hora = request.getParameter("hora");
+                //Se le agrega ":00" para ser mas facil su uso
                 hora = hora+":00";
-                
-                String tiempo = request.getParameter("tiempo");
-                
+                //Se obtiene el Dia de la Semana de la reserva
                 String formato = "dd/MM/yyyy";
                 SimpleDateFormat df = new SimpleDateFormat(formato);
                 Date fecha_ini = df.parse(fecha);
@@ -135,19 +144,19 @@ public class MovilServlet extends HttpServlet {
                 calendario.setTime(fecha_ini);
                 int dia_s = calendario.get(Calendar.DAY_OF_WEEK);
                 String dia_semana = Extras.Utiles.NumeroToDiaSemana2(dia_s);
-                
+                //Se introducen todos los datos de la Reserva
                 ht.setCliente(c.getId_cliente());
                 ht.setId_habitacion(h.getId_habitacion());
                 ht.setDia_semana(dia_semana);
                 ht.setFecha_entrada(fecha);
                 ht.setHora_entrada(hora);
-                
-                
+                //Estos 2 no se completan porque se completaron al hacer la Factura, si no se cancela antes
                 ht.setHora_salida("");
                 ht.setFecha_salida("");
-                
+                //Se Modifica el Estado de la Habitacion a Reservado
                 h.setEstado("R");
                 ch.Modificar(h);
+                //Se insertan los datos en el Historial
                 cht.Insertar(ht);
                 rd = request.getRequestDispatcher("Movil/Aceptada.jsp");
             if(rd != null){

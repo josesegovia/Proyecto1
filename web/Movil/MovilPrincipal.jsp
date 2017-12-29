@@ -1,7 +1,7 @@
 <%-- 
     Document   : MovilPrincipal
     Created on : 25/12/2017, 04:49:47 PM
-    Author     : Admin
+    Author     : Jose Segovia
 --%>
 
 <%@page import="Tablas.*"%>
@@ -15,6 +15,7 @@
         <link rel="stylesheet" type="text/css" href="w3.css">
     </head>
     <body>
+        <!--Se Obtienen todas las Habitaciones Libres-->
         <%  ArrayList<Habitaciones> habitaciones = (ArrayList<Habitaciones>) request.getAttribute("habitaciones");    %>
         <header class="w3-container w3-red w3-card w3-center w3-text-black">
             <h1>Hotel 4Quedas</h1>

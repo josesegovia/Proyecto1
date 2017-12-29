@@ -1,4 +1,4 @@
-<%-- any content can be specified here e.g.: --%>
+<%-- Aqui se pone la barra de Navegacion que se usa en todas las paginas--%>
 <%@ page pageEncoding="UTF-8" %>
 <div class="w3-container w3-teal w3-center" style="height: 10%;">
     <h1>Hotel 4Quedas</h1>
@@ -15,22 +15,4 @@
     <a class="w3-bar-item w3-button w3-green" href="HabitacionServlet">Habitaciones</a>
     <a class="w3-bar-item w3-button w3-green" href="HistorialServlet">Historia</a>
     <a class="w3-bar-item w3-button w3-green" href="FacturacionServlet">Facturas</a>
-    <%--
-    <div class="w3-dropdown-hover">
-        <button class="w3-button">Tablas</button>
-        <div class="w3-dropdown-content w3-bar-block w3-card-4">
-            <a class="w3-bar-item w3-button w3-green" href="/Proyecto1">Inicio</a>
-            <a class="w3-bar-item w3-button w3-green" href="RolServlet">Roles</a>
-            <a class="w3-bar-item w3-button w3-green" href="EmpleadoServlet">Empleados</a> 
-            <a class="w3-bar-item w3-button w3-green" href="HorariosServlet">Horarios</a>
-            <a class="w3-bar-item w3-button w3-green" href="InventarioServlet">Inventario</a> 
-            <a class="w3-bar-item w3-button w3-green" href="ClienteServlet">Clientes</a>
-            <a class="w3-bar-item w3-button w3-green" href="MembreciaServlet">Socios</a>
-            <a class="w3-bar-item w3-button w3-green" href="MembreciaServlet?vaccion=pagos">Pagos de Socios</a>
-            <a class="w3-bar-item w3-button w3-green" href="HabitacionServlet">Habitaciones</a>
-            <a class="w3-bar-item w3-button w3-green" href="HistorialServlet">Historia</a>
-            <a class="w3-bar-item w3-button w3-green" href="FacturacionServlet">Facturas</a>
-        </div>
-    </div>
-    --%>
 </div>

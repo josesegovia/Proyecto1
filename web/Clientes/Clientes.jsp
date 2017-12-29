@@ -1,7 +1,7 @@
 <%-- 
     Document   : Clientes
     Created on : 30/06/2017, 04:18:32 PM
-    Author     : Admin
+    Author     : Jose Segovia
 --%>
 
 <%@page import="Tablas.Cliente"%>
@@ -15,6 +15,7 @@
         <link rel="stylesheet" type="text/css" href="w3.css">
     </head>
     <body>
+        <!--Se obtienen los clientes para su uso-->
         <%  ArrayList<Cliente> clientes = (ArrayList<Cliente>) request.getAttribute("clientes");    %>
         <%@include file="/Navegacionjsp.jspf" %>
         <div class="w3-container w3-center w3-blue-gray body-height">
@@ -41,7 +42,9 @@
                         <div class="w3-dropdown-hover">
                             <button class="w3-button w3-red w3-hover-blue">Opciones</button>
                             <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                                <!--Este boton pide la modificacion el Cliente-->
                                 <a href="ClienteServlet?vaccion=mod&vid=<%= c.getId_cliente()%>" class="w3-bar-item w3-button w3-red w3-hover-blue">Modificar</a>
+                                <!--Este boton pide la eliminacion del Cliente-->
                                 <a href="ClienteServlet?vaccion=eliminar&vid=<%= c.getId_cliente()%>" class="w3-bar-item w3-button w3-red w3-hover-blue">Eliminar</a> 
                             </div>
                         </div>
@@ -50,6 +53,7 @@
         <%      }       %>
                 <tr>
                     <td colspan="5"> 
+                                <!--Este boton lleva a la Creacion de un Nuevo Cliente-->
                         <a href="ClienteServlet?vaccion=nuevocliente" class="w3-button w3-circle w3-teal w3-hover-green">+</a> 
                     </td>
                 </tr>

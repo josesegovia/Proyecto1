@@ -1,7 +1,7 @@
 <%-- 
     Document   : Roles
     Created on : 30/06/2017, 03:49:44 PM
-    Author     : Admin
+    Author     : Jose Segovia
 --%>
 
 <%@page import="Tablas.Rol"%>
@@ -15,6 +15,7 @@
         <link rel="stylesheet" type="text/css" href="w3.css">
     </head>
     <body>
+        <!--Se obtienen todos los Roles para su uso-->
         <%  ArrayList<Rol> roles = (ArrayList<Rol>) request.getAttribute("roles");    %>
         <%@include file="/Navegacionjsp.jspf" %>
         <div class="w3-container w3-center w3-blue-gray body-height">
@@ -53,7 +54,9 @@
                         <div class="w3-dropdown-hover">
                             <button class="w3-button w3-red w3-hover-blue">Opciones</button>
                             <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                                <!--Este boton pide la modificar los permisos del Rol-->
                                 <a href="RolServlet?vaccion=mod&vid=<%= r.getId_rol()%>" class="w3-bar-item w3-button w3-red w3-hover-blue">Asignar Permisos</a> 
+                                <!--Este boton pide la eliminacion del Rol-->
                                 <a href="RolServlet?vaccion=eliminar&vid=<%= r.getId_rol() %>" class="w3-bar-item w3-button w3-red w3-hover-blue">Eliminar</a> 
                             </div>
                         </div>
@@ -62,6 +65,7 @@
         <%      }       %>
                 <tr>
                     <td colspan="11"> 
+                        <!--Este boton lleva a la Creacion de un Nuevo Rol-->
                         <a href="RolServlet?vaccion=nuevorol" class="w3-button w3-circle w3-teal w3-hover-green">+</a>
                     </td>
                 </tr>

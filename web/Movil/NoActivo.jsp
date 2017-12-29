@@ -1,7 +1,7 @@
 <%-- 
     Document   : NoActivo
     Created on : 25/12/2017, 09:05:14 PM
-    Author     : Admin
+    Author     : Jose Segovia
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

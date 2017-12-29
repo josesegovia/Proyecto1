@@ -1,7 +1,7 @@
 <%-- 
     Document   : Aceptada
     Created on : 25/12/2017, 09:02:14 PM
-    Author     : Admin
+    Author     : Jose Segovia
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -21,6 +21,7 @@
         </div>
         <div class="w3-cell-row w3-orange centro">
             <div class="w3-cell w3-center" style="width: 100%;">
+                <!--Al aceptarse la peticion se pide que se cierre la sesion-->
                 <a class="w3-centered w3-btn w3-blue w3-margin w3-hover-cyan" href="MovilServlet?vaccion=logout">LogOut</a>
             </div>
         </div>
